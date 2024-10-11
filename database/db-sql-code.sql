@@ -46,6 +46,8 @@ CREATE TABLE IF NOT EXISTS public.account
 INSERT INTO public.classification (classification_name)
 VALUES ('Customs'), ('Sports'), ('SUV'), ('Truck'), ('Sedan');
 
-UPDATE public.inventory SET inv_description = REPLACE(inv_description, 'the small interiors', 'a huge interior') WHERE inv_id = 10;
-
-UPDATE public.inventory SET inv_image = REPLACE(inv_image, '/images', '/images/vehicles'), inv_thumbnail = REPLACE (inv_thumbnail, '/images', '/images/vehicles');
+-- 6-The inv_image and inv_thumbnail update query works
+update public.inventory
+set inv_image = replace(inv_image, '/images/', '/images/vehicles/'),
+inv_thumbnail = replace(inv_thumbnail, '/images/', '/images/vehicles/')
+where inv_image like '/images/%' or inv_thumbnail like '/images/%';
