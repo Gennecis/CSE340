@@ -1,0 +1,102 @@
+<!-- Page Title -->
+<% if (title) { %>
+    <h1><%= title %></h1>
+<% } %>
+
+<!-- Flash Messages -->
+<%- messages() %>
+
+<!-- Error Messages -->
+<% if (errors) { %>
+    <ul class="notice">
+   <% errors.array().forEach(error => { %>
+     <li><%= error.msg %></li>
+  <%  }) %>
+   </ul>
+  <% } %>
+
+<!-- Registration Form -->
+<!-- <div class="registration-form">
+    <form action="/account/registration" method="post">
+        <label for="firstname">First Name:</label>
+        <input type="text" name="account_first_name" id="account_first_name" required>
+        <label for="lastname">Last Name:</label>
+        <input type="text" name="account_last_name" id="account_last_name" required>
+        <label for="email">Email:</label>
+        <input type="text" name="account_email" id="account_email" required>
+        <label for="password">Password:</label>
+        <input type="password" name="account_password" id="account_password" required>
+        <span id="showPassword">Show Password</span>
+        <input type="submit" value="sign up">
+    </form>
+    <p>Already have an account? <a href="/account/login">sign in</a></p>
+</div> -->
+
+
+
+<div class="registration-form">
+    <form action="/account/register" method="post">
+        <fieldset>
+            <legend>Sign Up</legend>
+
+            <!-- First Name -->
+            <div class="form-group">
+                <label for="account_firstname">First Name: <span class="required">*</span></label>
+                <input type="text" name="account_firstname" id="account_firstname" required>
+            </div>
+
+            <!-- Last Name -->
+            <div class="form-group">
+                <label for="account_lastname">Last Name: <span class="required">*</span></label>
+                <input type="text" name="account_lastname" id="account_lastname" required>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="account_email">Email: <span class="required">*</span></label>
+                <input type="email" name="account_email" id="account_email" required>
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+                <label for="account_password">Password: <span class="required">*</span></label>
+                <input type="password" name="account_password" id="account_password" 
+                    required 
+                    pattern="(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{12,}" 
+                    title="Password must be at least 12 characters long, contain one uppercase letter, one number, and one special character.">
+                <small>Password must be at least 12 characters long, contain 1 capital letter, 1 number, and 1 special character.</small>
+            </div>
+
+            <!-- Show Password Checkbox -->
+            <div class="form-group-inline">
+                <input type="checkbox" id="showPassword">
+                <label for="showPassword">Show Password</label>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-group">
+                <input type="submit" value="Sign Up">
+            </div>
+        </fieldset>
+        <p>Already have an account? <a href="/account/login">Sign in</a></p>
+    </form>
+
+    <!-- <p>Already have an account? <a href="/account/login">Sign in</a></p> -->
+</div>
+
+
+
+<!-- script to enable user to toggle the show password feature on and off -->
+<script>
+const paswrdbtn = document.getElementById("showPassword");
+paswrdbtn.addEventListener("click", function() {
+    const passwordInput = document.getElementById("account_password");
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        paswrdbtn.innerHTML = "Hide Password";
+    } else {
+        passwordInput.type = "password";
+        paswrdbtn.innerHTML = "Show Password";
+    }
+})
+</script>

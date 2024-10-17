@@ -198,7 +198,151 @@ img {
   border-radius: 5px;
 }
 
-/* larger screen styles */
+
+/*************** login page styles *********************/
+
+.login-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 70vh; /* Full viewport height to center vertically */
+}
+
+.login-form form {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  padding: 20px;
+  background-color: #f4f4f4; /* Light background for form */
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+.login-form label {
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.login-form input[type="text"],
+.login-form input[type="password"] {
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.login-form input[type="submit"] {
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.login-form input[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+
+/******************** registration page styles ********************/
+
+/*  */
+.registration-form {
+  max-width: 500px; /* Limit the width of the form */
+  margin: 0 auto; /* Center the form */
+  padding: 20px; /* Inner padding */
+  background: #ffffff; /* White background for form */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+}
+
+/* Form Group styling */
+.form-group {
+  margin-bottom: 15px; /* Space between form groups */
+}
+
+.form-group-inline {
+  display: flex; /* Align items in a row */
+  align-items: center; /* Center items vertically */
+}
+
+.form-group-inline input[type="checkbox"] {
+  margin-right: -70px; /* Adds spacing between the checkbox and label */
+}
+
+
+/* Label styling */
+label {
+  display: block; /* Block display for labels */
+  margin-bottom: 3px; /* Space below labels */
+  color: #555; /* Medium gray for labels */
+}
+
+/* Input styling */
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 100%; /* Full width */
+  padding: 10px; /* Inner padding */
+  border: 1px solid #ccc; /* Light border */
+  border-radius: 4px; /* Rounded corners */
+  font-size: 16px; /* Larger font size */
+  transition: border 0.3s; /* Smooth border transition */
+}
+
+/* Input focus styling */
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+  border-color: #007bff; /* Change border color on focus */
+  outline: none; /* Remove outline */
+}
+
+/* Small text styling */
+small {
+  display: block; /* Small text on a new line */
+  color: #777; /* Light gray for hints */
+}
+
+/* Submit button styling */
+input[type="submit"] {
+  background-color: #007bff; /* Primary button color */
+  color: #ffffff; /* White text color */
+  padding: 10px; /* Inner padding */
+  border: none; /* No border */
+  border-radius: 4px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  font-size: 16px; /* Font size */
+  transition: background-color 0.3s; /* Smooth background color transition */
+  width: 100%; /* Full width for button */
+}
+
+/* Submit button hover effect */
+input[type="submit"]:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+}
+
+/* Link styling */
+a {
+  color: #007bff; /* Link color */
+  text-decoration: none; /* Remove underline */
+}
+
+a:hover {
+  text-decoration: underline; /* Underline on hover */
+}
+
+/* Required field indicator */
+.required {
+  color: red; /* Red color for required fields */
+}
+
+
+/******************* larger screen styles ********************/
 @media screen and (min-width: 600px) {
   .upgrade_and_review {
   grid-template-columns: 1fr 1fr; /* Two equal-width columns */
@@ -207,6 +351,23 @@ img {
 #inv-display {
   grid-template-columns: 1fr 1fr; /* Two columns: text on the left, image on the right */
   gap: 20px;
+}
+
+.registration-form {
+  padding: 15px; /* Reduce padding for smaller screens */
+}
+
+input[type="submit"] {
+  padding: 12px; /* Adjust button padding */
+  font-size: 15px; /* Slightly smaller font for smaller screens */
+}
+
+.registration-form {
+  padding: 20px; /* Normal padding for larger screens */
+}
+
+.form-group-inline input[type="checkbox"] {
+  margin-right: -150px; /* Adds spacing between the checkbox and label */
 }
 
 }
