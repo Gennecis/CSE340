@@ -1,0 +1,23 @@
+<% if (title) { %>
+    <h1><%= title %></h1>
+    <% } else {
+      res.redirect('/')
+    } %>
+
+
+  <!-- Flash Messages -->
+  <%- messages() %>
+  
+  <section id="management">
+    <h2>Manage Your Inventory</h2>
+    <ul>
+        <li>
+            <!-- Link to Add New Classification View (Task 2) -->
+            <a href="/inv/add-classification">Add New Classification</a>
+        </li>
+        <li>
+            <!-- Link to Add New Inventory View (Task 3) -->
+            <a href="/inv/add-inventory">Add New Inventory Item</a>
+        </li>
+    </ul>
+</section>
