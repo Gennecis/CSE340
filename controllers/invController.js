@@ -61,10 +61,12 @@ invCont.buildInventoryById = async function (req, res, next) {
 invCont.buildManagementView = async (req, res) => {
   try {
     const nav = await utilities.getNav();
+    const classificationSelect = await utilities.buildClassificationList();
     res.render("./inventory/management", {
       title: "Inventory Management",
       nav,
       errors: null,
+      classificationSelect
     });
   } catch (err) {
     console.error("Error serving the management view: ", err);
@@ -152,6 +154,7 @@ invCont.renderAddInventory = async (req, res) => {
   }
 };
 
+
 /* ***************************
  *  Handle Add Inventory Form Submission
  * ************************** */
@@ -218,5 +221,127 @@ invCont.addInventory = async (req, res) => {
     });
   }
 };
+
+
+/* ***************************
+ *  Return Inventory by Classification As JSON
+ * ************************** */
+// invCont.getInventoryJSON = async (req, res, next) => {
+//   const classification_id = parseInt(req.params.classification_id)
+//   const invData = await invModel.getInventoryByClassificationId(classification_id)
+//   if (invData[0].inv_id) {
+//     return res.json(invData)
+//   } else {
+//     next(new Error("No data returned"))
+//   }
+// }
+
+
+invCont.getInventoryJSON = async (req, res, next) => {
+  const classification_id = parseInt(req.params.classificationId);
+
+  // Validate classification_id
+  if (isNaN(classification_id)) {
+    return res.status(400).json({ error: "Invalid classification ID. It must be an integer." });
+  }
+
+  try {
+    const invData = await invModel.getInventoryByClassificationId(classification_id);
+
+    // Check if data was returned
+    if (invData && invData.length > 0 && invData[0].inv_id) {
+      return res.json(invData);
+    } else {
+      // If no data found, respond with a 404 status and message
+      return res.status(404).json({ message: "No inventory data found for the provided classification ID." });
+    }
+  } catch (error) {
+    console.error("Error fetching inventory data:", error);
+    next(error); // Passes the error to the error-handling middleware
+  }
+};
+
+
+/* ***************************
+ *  Render edit inventory View
+ * ************************** */
+invCont.renderEditInventory = async (req, res) => {
+  const inv_id = parseInt(req.params.inventoryId);
+  try {
+    const nav = await utilities.getNav();
+    const data = await invModel.getInventoryById(inv_id);
+    const name = `${data[0].inv_make} ${data[0].inv_model}`;
+    const classificationList = await utilities.buildClassificationList(); // Generate the select list for classifications
+    res.render("./inventory/edit-inventory", {
+      title: `Edit ${name}`,
+      nav,
+      classificationList,
+      errors: null,
+      inv_id: data[0].inv_id,
+      inv_make: data[0].inv_make,
+      inv_model: data[0].inv_model,
+      inv_year: data[0].inv_year,
+      inv_description: data[0].inv_description,
+      inv_price: data[0].inv_price,
+      inv_miles: data[0].inv_miles,
+      inv_color: data[0].inv_color,
+      inv_image: data[0].inv_image,
+      inv_thumbnail: data[0].inv_thumbnail,
+      classification_id: data[0].classification_id,
+    });
+  } catch (err) {
+    console.error("Error rendering add-inventory view:", err);
+    res.status(500).send("Server Error");
+  }
+};
+
+
+
+
+/* ***************************
+ *  Handle update Inventory Form Submission
+ * ************************** */
+invCont.updateInventory = async (req, res) => {
+  const { classification_id, inv_make, inv_model, inv_year, inv_description, inv_price, inv_miles, inv_color, inv_image, inv_thumbnail, inv_id } = req.body;
+  const nav = await utilities.getNav();
+
+  try {
+    // Ensure that you're passing the values individually, not as an object
+    const updateResult = await invModel.updateInventory(
+      inv_id, inv_make, inv_model, inv_year, inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color, classification_id
+    );
+
+    // If updateResult is truthy, vehicle was updated successfully
+    if (updateResult) {
+      const name = updateResult.inv_make + " " + updateResult.inv_model
+      req.flash("notice", `${name} updated successfully.`);
+      res.redirect(".");
+    } else {
+      const classificationSelect = await utilities.buildClassificationList(classification_id)
+      const name = `${inv_make} ${inv_model}`
+      req.flash("notice", "Sorry, the update failed.")
+      res.status(501).render("inventory/edit-inventory", {
+      title: "Edit " + name,
+      nav,
+      classificationSelect: classificationSelect,
+      errors: null,
+      inv_id,
+      inv_make,
+      inv_model,
+      inv_year,
+      inv_description,
+      inv_image,
+      inv_thumbnail,
+      inv_price,
+      inv_miles,
+      inv_color,
+      classification_id
+      })
+    }
+  } catch (error) {
+    console.error("Error updating inventory:", error);
+  }
+};
+
 
 module.exports = invCont

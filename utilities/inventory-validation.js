@@ -104,4 +104,52 @@ validate.inventoryRules = () => {
   };
 
 
+
+  /* ***************************
+   *  direct errors to the edit view
+   * ************************** */
+  validate.checkUpdateData = async (req, res, next) => {
+    const {
+      inv_id,
+      inv_make,
+      inv_model,
+      inv_description,
+      inv_image,
+      inv_price,
+      inv_miles,
+      inv_color,
+      inv_year,
+      inv_thumbnail,
+      classification_id,
+    } = req.body;
+    let errors = validationResult(req);
+   
+    if (!errors.isEmpty()) {
+      let nav = await utilities.getNav();
+      let classificationList = await utilities.buildClassificationList(
+        classification_id
+      ); // Pass classification_id to make dropdown sticky
+   
+      res.render("inventory/edit-inventory", {
+        errors,
+        title: "edit Inventory",
+        nav,
+        inv_id,
+        inv_make,
+        inv_model,
+        inv_description,
+        inv_image,
+        inv_price,
+        inv_miles,
+        inv_color,
+        inv_year,
+        inv_thumbnail,
+        classificationList,
+        classification_id,
+      });
+      return;
+    }
+    next();
+  };
+
   module.exports = validate
