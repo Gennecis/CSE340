@@ -180,4 +180,22 @@ Util.checkLogin = (req, res, next) => {
   }
 }
 
+Util.checkAccountType = (req, res, next) => {
+  if (res.locals.loggedin && res.locals.accountData) {
+    const accountType = res.locals.accountData.accountType;
+
+    if (accountType === "Employee" || accountType === "Admin") {
+      return next();
+    } else {
+      req.flash("notice", "You do not have permission to access this view.");
+      return res.redirect("/account/");
+    }
+  } else {
+    req.flash("notice", "Please log in to access this view.");
+    return res.redirect("/account/login");
+  }
+};
+
+
+
 module.exports = Util

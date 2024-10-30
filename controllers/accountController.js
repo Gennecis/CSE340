@@ -70,12 +70,14 @@ async function registerAccount(req, res) {
       res.status(201).render("account/login", {
         title: "Login",
         nav,
+        errors: null,
       })
     } else {
       req.flash("notice", "Sorry, the registration failed.")
       res.status(501).render("account/register", {
         title: "sign up",
         nav,
+        errors: null,
       })
     }
   }
@@ -95,7 +97,7 @@ async function accountLogin(req, res) {
         title: "Login",
         nav,
         errors: null,
-        account_email
+        account_email,
       })
       return
     }
@@ -141,4 +143,72 @@ async function buildAccountManagement(req, res) {
 }
 
 
-module.exports = { buildLogin, buildRegistration, registerAccount, accountLogin, buildAccountManagement }
+// Function to update account 
+async function buildUpdateAccount(req, res) {
+  let nav = await utilities.getNav();
+  res.render("account/update", {
+    title: "Manage Account",
+    nav,
+    errors: null,
+   
+  });
+}
+
+
+// Function to update account
+async function updateAccount(req, res) {
+  const { account_firstname, account_lastname, account_email, account_id } = req.body
+  parseInt(account_id)
+  const accountData = await accountModel.getAccountById(account_id)
+  // parseInt(account_id)
+  let nav = await utilities.getNav();
+  try {
+    await accountModel.updateUserAccount(account_firstname, account_lastname, account_email, account_id)
+    res.render('account/account-management', {
+      nav,
+      title: 'Update Account Information',
+      accountData,
+      errors: null
+    })
+  } catch (error) {
+    console.error("Error updating account:", error)
+    res.status(500).send("An error occurred while updating the account.")
+  }
+}
+
+// function to build change password
+async function buildChangePassword(req, res) {
+  const { account_id, account_password, confirm_password } = req.body
+  let nav = await utilities.getNav();
+  if (account_password !== confirm_password) {
+    req.flash("notice", "passwords do not match")
+    return res.status(400).render("account/update", {
+      title: "Change Password",
+      nav,
+      errors: null
+    })
+  }
+  const hashedPassword = await bcrypt.hash(account_password, 10);
+  const updatePassword = await accountModel.updateUserPassword(hashedPassword, account_id)
+  if(updatePassword) {
+    req.flash("notice", "password change was successful")
+    res.redirect('/account/')
+  } else{
+    req.flash("notice", "could not change password, please try again")
+    return res.status(500).render("account/update", {
+      title: "Change Password",
+      nav,
+      errors: null
+    })
+    }
+  }
+
+
+// build logout
+async function accountLogout(req, res) {
+  res.clearCookie("jwt")
+  req.flash("notice", "You have been logged out.");
+  res.redirect("/account/login");
+}
+
+module.exports = { buildLogin, buildRegistration, registerAccount, accountLogin, buildAccountManagement, buildUpdateAccount, updateAccount, buildChangePassword, accountLogout }

@@ -51,3 +51,4 @@ update public.inventory
 set inv_image = replace(inv_image, '/images/', '/images/vehicles/'),
 inv_thumbnail = replace(inv_thumbnail, '/images/', '/images/vehicles/')
 where inv_image like '/images/%' or inv_thumbnail like '/images/%';
+

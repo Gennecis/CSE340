@@ -152,4 +152,5 @@ validate.inventoryRules = () => {
     next();
   };
 
+  
   module.exports = validate

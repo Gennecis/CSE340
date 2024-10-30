@@ -163,7 +163,7 @@ invCont.addInventory = async (req, res) => {
   const nav = await utilities.getNav();
 
   try {
-    // Ensure that you're passing the values individually, not as an object
+    // pass the values individually, not as an object
     const result = await invModel.insertInventory(
       inv_make, inv_model, inv_year, inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color, classification_id
     );
@@ -271,7 +271,7 @@ invCont.renderEditInventory = async (req, res) => {
     const nav = await utilities.getNav();
     const data = await invModel.getInventoryById(inv_id);
     const name = `${data[0].inv_make} ${data[0].inv_model}`;
-    const classificationList = await utilities.buildClassificationList(); // Generate the select list for classifications
+    const classificationList = await utilities.buildClassificationList(); 
     res.render("./inventory/edit-inventory", {
       title: `Edit ${name}`,
       nav,
@@ -290,7 +290,7 @@ invCont.renderEditInventory = async (req, res) => {
       classification_id: data[0].classification_id,
     });
   } catch (err) {
-    console.error("Error rendering add-inventory view:", err);
+    console.error("Error rendering edit-inventory view:", err);
     res.status(500).send("Server Error");
   }
 };
@@ -306,7 +306,7 @@ invCont.updateInventory = async (req, res) => {
   const nav = await utilities.getNav();
 
   try {
-    // Ensure that you're passing the values individually, not as an object
+    // pass the values individually, not as an object
     const updateResult = await invModel.updateInventory(
       inv_id, inv_make, inv_model, inv_year, inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color, classification_id
     );
@@ -340,6 +340,68 @@ invCont.updateInventory = async (req, res) => {
     }
   } catch (error) {
     console.error("Error updating inventory:", error);
+  }
+};
+
+
+
+
+/* ***************************
+ *  Render delete inventory View
+ * ************************** */
+invCont.renderDeleteInventory = async (req, res) => {
+  const inv_id = parseInt(req.params.inventoryId);
+  try {
+    const nav = await utilities.getNav();
+    const data = await invModel.getInventoryById(inv_id);
+    const name = `${data[0].inv_make} ${data[0].inv_model}`;
+    // const classificationList = await utilities.buildClassificationList();
+    res.render("./inventory/delete-confirmation", {
+      title: `Delete ${name}`,
+      nav,
+      // classificationList,
+      errors: null,
+      inv_id: data[0].inv_id,
+      inv_make: data[0].inv_make,
+      inv_model: data[0].inv_model,
+      inv_year: data[0].inv_year,
+      inv_price: data[0].inv_price,
+    });
+  } catch (err) {
+    console.error("Error rendering delete-confirmation view:", err);
+    res.status(500).send("Server Error");
+  }
+};
+
+
+/* ***************************
+ *  Handle delete Inventory Form Submission
+ * ************************** */
+invCont.deleteInventory = async (req, res) => {
+  const {inv_id} = req.body;
+  parseInt(inv_id);
+
+  // const { classification_id, inv_make, inv_model, inv_year, inv_description, inv_price, inv_miles, inv_color, inv_image, inv_thumbnail, inv_id } = req.body;
+  const nav = await utilities.getNav();
+
+  try {
+    const data = await invModel.getInventoryById(inv_id);
+    const itemName = `${data[0].inv_make} ${data[0].inv_model}`;
+
+    // pass the values individually, not as an object
+    const deleteResult = await invModel.deleteInventoryItem(inv_id);
+
+    // If updateResult is truthy, vehicle was updated successfully
+    if (deleteResult) {
+      // const name = deleteResult.inv_make + " " + deleteResult.inv_model
+      req.flash("notice", `${itemName} deleted successfully.`);
+      res.redirect(".");
+    } else {
+      req.flash("notice", "Sorry, the delete failed.")
+      res.redirect("inventory/delete-confirmation")
+    }
+  } catch (error) {
+    console.error("Error deleting inventory:", error);
   }
 };
 

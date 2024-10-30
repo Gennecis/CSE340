@@ -106,7 +106,7 @@ async function insertInventory(
 
 
 /* ***************************
- *  Insert update Inventory
+ *  update Inventory
  * ************************** */
 async function updateInventory(
   inv_id,
@@ -138,7 +138,7 @@ async function updateInventory(
       inv_id
     ]);
 
-    // Check if update was successful was successful
+    // Check if update was successful
     if (result) {
       return result.rows[0]; // Return the entire result object
     } else {
@@ -146,11 +146,36 @@ async function updateInventory(
     }
   } catch (error) {
     // Log the full error for more details
-    console.error("Error update inventory item:", error);
+    console.error("Error updating inventory item:", error);
     throw error; // Re-throw the error to let the controller handle it properly
   }
 }
 
 
+
+/* ***************************
+ *  delete Inventory
+ * ************************** */
+async function deleteInventoryItem(inv_id) {
+  try {
+    const sql = "DELETE FROM inventory WHERE inv_id = $1";
+
+    const result = await pool.query(sql, [inv_id]);
+
+    // Check if update was successful was successful
+    if (result) {
+      return result; // Return the entire result object
+    } else {
+      throw new Error('Delete failed. Something went wrong.');
+    }
+  } catch (error) {
+    // Log the full error for more details
+    console.error("Error deleting inventory item:", error);
+    throw error; // Re-throw the error to let the controller handle it properly
+  }
+}
+
+
+
 // module.exports = {getClassifications, getInventoryByClassificationId, getInventory, getInventoryById};
-module.exports = {getClassifications, getInventoryByClassificationId, getInventoryById, insertClassification, insertInventory, updateInventory};
+module.exports = {getClassifications, getInventoryByClassificationId, getInventoryById, insertClassification, insertInventory, updateInventory, deleteInventoryItem};
