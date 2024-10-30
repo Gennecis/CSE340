@@ -122,7 +122,14 @@ async function accountLogin(req, res) {
           })
         }
       } catch (error) {
-        throw new Error('Access Forbidden')
+        console.error('Error while trying to login', error)
+        req.flash("notice", "An error occurred. Please try again later.")
+        res.status(403).render("account/login", {
+          title: "Login",
+          nav,
+          errors: null,
+          account_email
+        })
       }
     }
 
