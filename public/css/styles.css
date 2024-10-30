@@ -330,7 +330,7 @@ input[type="submit"]:hover {
 
 /* Link styling */
 a {
-  color: #007bff; /* Link color */
+  color: indigo; /* Link color */
   text-decoration: none; /* Remove underline */
 }
 
@@ -340,7 +340,7 @@ a:hover {
 
 /* Required field indicator */
 .required {
-  color: red; /* Red color for required fields */
+  color: black; /* Red color for required fields */
 }
 
 
@@ -545,6 +545,9 @@ a:hover {
   background-color: white;
 }
 
+#update-account-link{
+  color: indigo;
+}
 
 /* **************************
  * edit inventory styles 
@@ -740,7 +743,7 @@ input[type="submit"]:hover {
 }
 
 small {
-  color: #777; /* Light gray color for notes */
+  color: black; /* Light gray color for notes */
   margin-top: 0.5rem;
   text-align: center; /* Center the small note */
 }
