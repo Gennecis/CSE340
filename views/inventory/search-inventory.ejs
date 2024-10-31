@@ -24,7 +24,9 @@
     <h1>Search Inventory by ID</h1>
     
     <label for="inv_id">Inventory ID:</label>
-    <input type="number" name="inv_id" id="inv_id" required>
+    <input type="number" name="inv_id" id="inv_id" required 
+    pattern="^\d+$" 
+    title="Inventory ID must be a numeric value without spaces.">
 
     <button type="submit">Search</button>
 </form>

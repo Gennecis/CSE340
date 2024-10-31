@@ -57,6 +57,8 @@ router.get("/search-inventory", utilities.handleErrors(invController.renderSearc
 // Route to handle search form submission
 router.post(
   "/search-inventory",
+  invValidate.searchRules(),
+  invValidate.checkSearchData,
   utilities.handleErrors(invController.searchInventory),
 );
 

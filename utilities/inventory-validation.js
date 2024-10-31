@@ -152,5 +152,39 @@ validate.inventoryRules = () => {
     next();
   };
 
-  
-  module.exports = validate
+
+
+
+
+validate.searchRules = () => {
+  return [
+    body("inv_id")
+      .notEmpty().withMessage("Please provide a valid inventory id.") 
+      .isInt({ min: 0 }).withMessage("Inventory ID must be a positive integer.")
+  ];
+};
+
+
+
+
+
+validate.checkSearchData = async (req, res, next) => {
+  const { inv_id } = req.body; // Extract the inventory ID from the request body
+  let errors = validationResult(req); // Validate the request against the defined rules
+
+  if (!errors.isEmpty()) {
+      let nav = await utilities.getNav(); // Retrieve navigation data if needed
+      
+      // Render the search inventory view with error messages and retain input value
+      res.render("inventory/search-inventory", {
+          errors, // Convert validation errors to an array
+          title: "Search Inventory",
+          nav,
+          inv_id, // Retain the input value for the user
+      });
+      return; // Exit the function
+  }
+  next(); // If no errors, proceed to the next middleware or route handler
+};
+
+module.exports = validate
