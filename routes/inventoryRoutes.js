@@ -45,10 +45,19 @@ router.get("/edit/:inventoryId", utilities.handleErrors(invController.renderEdit
 // Route to handle update form submission
 router.post("/edit-inventory/", invValidate.inventoryRules(), invValidate.checkUpdateData, utilities.handleErrors(invController.updateInventory));
 
-// Add a "get" route to match the path that already exists in the inventory management view for the "Delete" link. Be sure to include a parameter to represent the incoming inv_id as part of the URL.
+// Add a "get" route to match the path that already exists in the inventory management view for the "Delete" link.
 router.get("/delete/:inventoryId", utilities.handleErrors(invController.renderDeleteInventory));
 
 // Add a "post" route handler that will call a controller function to carry out the delete process.
 router.post("/delete-inventory/", utilities.handleErrors(invController.deleteInventory));
+
+// Route to display the search inventory view
+router.get("/search-inventory", utilities.handleErrors(invController.renderSearchInventory));
+
+// Route to handle search form submission
+router.post(
+  "/search-inventory",
+  utilities.handleErrors(invController.searchInventory),
+);
 
 module.exports = router;

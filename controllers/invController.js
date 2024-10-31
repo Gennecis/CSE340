@@ -406,4 +406,59 @@ invCont.deleteInventory = async (req, res) => {
 };
 
 
+/* ***************************
+ *  Render Search Inventory View
+ * ************************** */
+invCont.renderSearchInventory = async (req, res) => {
+  try {
+      const nav = await utilities.getNav();
+      res.render("./inventory/search-inventory", {
+          title: "Search Inventory",
+          nav,
+          errors: null,
+      });
+  } catch (error) {
+      console.error("Error rendering search-inventory view:", error);
+      res.status(500).send("Server Error");
+  }
+};
+
+/* ***************************
+*  Handle Search Inventory Form Submission
+* ************************** */
+invCont.searchInventory = async (req, res) => {
+  const { inv_id } = req.body; // use inventory ID for search
+  const nav = await utilities.getNav();
+
+  try {
+      // Search by ID
+      const results = await invModel.findInventoryById(inv_id);
+
+      // Check if results were found
+      if (results && results.length > 0) {
+          res.render("./inventory/search-results", {
+              title: "Search Results",
+              nav,
+              results,
+              errors: null,
+          });
+      } else {
+          req.flash("notice", "No vehicle found with the given ID.");
+          res.render("./inventory/search-inventory", {
+              title: "Search Inventory",
+              nav,
+              errors: null,
+          });
+      }
+  } catch (error) {
+      console.error("Error searching inventory:", error);
+      req.flash("notice", "Error searching inventory. Please try again.");
+      res.render("./inventory/search-inventory", {
+          title: "Search Inventory",
+          nav,
+          errors: null,
+      });
+  }
+};
+
 module.exports = invCont

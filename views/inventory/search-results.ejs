@@ -1,0 +1,38 @@
+<% if (title) { %>
+    <h1><%= title %></h1>
+    <% } else {
+      res.redirect('/')
+    } %>
+
+<!-- Flash messages -->
+<%- messages() %>
+
+
+<!-- Add error -->
+<% if (errors) { %>
+    <ul class="notice">
+   <% errors.array().forEach(error => { %>
+     <li><%= error.msg %></li>
+  <%  }) %>
+   </ul>
+  <% } %>
+
+
+<!-- Search Results -->
+<% if (results.length > 0) { %>
+    <div>
+        <h2>Vehicle Details</h2>
+        <% results.forEach(vehicle => { %>
+            <div>
+                <h3><%= vehicle.inv_make %> <%= vehicle.inv_model %> (<%= vehicle.inv_year %>)</h3>
+                <p>Description: <%= vehicle.inv_description %></p>
+                <p>Price: $<%= vehicle.inv_price %></p>
+                <p>Miles: <%= vehicle.inv_miles %></p>
+                <p>Color: <%= vehicle.inv_color %></p>
+                <img src="<%= vehicle.inv_image %>" alt="<%= vehicle.inv_make %> <%= vehicle.inv_model %> Image">
+            </div>
+        <% }); %>
+    </div>
+<% } else { %>
+    <p>No vehicle found with the given ID.</p>
+<% } %>

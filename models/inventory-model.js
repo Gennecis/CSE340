@@ -175,7 +175,14 @@ async function deleteInventoryItem(inv_id) {
   }
 }
 
+// Find inventory by ID
+async function findInventoryById(inv_id){
+  const sql = 'SELECT * FROM inventory WHERE inv_id = $1';
+  const values = [inv_id];
+
+  const result = await pool.query(sql, values);
+  return result.rows; // Return the matched vehicle(s)
+};
 
 
-// module.exports = {getClassifications, getInventoryByClassificationId, getInventory, getInventoryById};
-module.exports = {getClassifications, getInventoryByClassificationId, getInventoryById, insertClassification, insertInventory, updateInventory, deleteInventoryItem};
+module.exports = {getClassifications, getInventoryByClassificationId, getInventoryById, insertClassification, insertInventory, updateInventory, deleteInventoryItem, findInventoryById};
